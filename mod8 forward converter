@@ -1,0 +1,46 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 09/02/2023 11:01:22 PM
+-- Design Name: 
+-- Module Name: mod8converter - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity mod8converter is
+    Port (
+        numIn: in std_logic_vector(8 downto 0);
+        numOut: out std_logic_vector(2 downto 0)
+     );
+end mod8converter;
+
+architecture Behavioral of mod8converter is
+
+begin
+    numOut <= numIn(2 downto 0);
+
+end Behavioral;
