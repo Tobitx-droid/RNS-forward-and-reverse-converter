@@ -1,0 +1,106 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 09/04/2023 03:17:51 PM
+-- Design Name: 
+-- Module Name: RNSsys - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity RNSsys is
+    Port (
+        inports: in std_logic_vector(8 downto 0);
+        outports: out std_logic_vector(8 downto 0)
+     );
+end RNSsys;
+
+architecture Behavioral of RNSsys is
+-----component declaration----
+    component Total is
+       Port (
+           numberIn : in std_logic_vector(8 downto 0);
+           numberOut: out std_logic_vector(8 downto 0)
+           
+        );
+    end component;
+    
+    component comparator is
+        Port (
+            in0i,in0ii,in1i,in1ii,in2i,in2ii,in3i,in3ii: in std_logic;
+            in4i,in4ii,in5i,in5ii,in6i,in6ii,in7i,in7ii: in std_logic;
+            in8i,in8ii: in std_logic;
+            out0,out1,out2,out3,out4,out5,out6,out7,out8: out std_logic
+         );
+    end component;
+    
+----signal declaration----
+    signal OutXorB : std_logic_vector(8 downto 0);
+    signal InXorA  : std_logic_vector(8 downto 0);
+    
+    
+begin
+    InXorA <= inports;
+----port map----
+    totalSys: Total port map(
+        numberIn  => InXorA,
+        numberOut => OutXorB
+    );
+    
+    comparatorSys: comparator port map(
+            in0i  => InXorA(0),
+            in0ii => OutXorB(0),
+            in1i  => InXorA(1),
+            in1ii => OutXorB(1),
+            in2i  => InXorA(2),
+            in2ii => OutXorB(2),
+            in3i  => InXorA(3),
+            in3ii => OutXorB(3),
+            in4i  => InXorA(4),
+            in4ii => OutXorB(4),
+            in5i  => InXorA(5),
+            in5ii => OutXorB(5),
+            in6i  => InXorA(6),
+            in6ii => OutXorB(6),
+            in7i  => InXorA(7),
+            in7ii => OutXorB(7),
+            in8i  => InXorA(8),
+            in8ii => OutXorB(8),
+            out0  => outports(0),
+            out1  => outports(1),
+            out2  => outports(2),
+            out3  => outports(3),
+            out4  => outports(4),
+            out5  => outports(5),
+            out6  => outports(6),
+            out7  => outports(7),
+            out8  => outports(8)
+         );
+    
+    
+    
+    
+end Behavioral;
