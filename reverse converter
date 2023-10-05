@@ -1,0 +1,293 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 09/19/2023 10:53:44 AM
+-- Design Name: 
+-- Module Name: reverse_converterII - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity reverse_converterII is
+    Port (
+        Roo,RoI,Ro2 : in std_logic;
+        RmIo,RmII,RmI2: in std_logic;
+        RpIo,RpII,RpI2,RpI3: in std_logic;
+        n: out std_logic_vector(8 downto 0)
+     );
+end reverse_converterII;
+
+architecture Behavioral of reverse_converterII is
+------component declaration----------
+
+    component RL is
+        Port (
+            R00,Rm10,R01,Rm11,R02,Rm12,R03,Rm13: in std_logic;
+            RL4,RL3,RL2,RL1,RL0: out std_logic                
+         );
+    end component;
+    
+    component RR is
+        Port (
+            R00,Rp10,R01,Rp11,R02,Rp12,R03,Rp13: in std_logic;
+            RR4,RR3,RR2,RR1,RR0: out std_logic
+         );
+    end component;
+    
+    component SOD is
+        Port (
+            RR4,RR3,RR2,RR1,RR0 : in std_logic;
+            RL4,RL3,RL2,RL1,RL0 : in std_logic;
+            bit0,bit1,bit2,bit3,bit4 : out std_logic
+         );
+    end component;
+    
+    component new_block1 is
+        Port (---inputs---
+            R02,R01,R00: in std_logic;
+            Rp10,Rp11,Rp12,Rp13: in std_logic;
+            Rm10,Rm11,Rm12: in std_logic;
+            ----outputs----
+            out0,out1,out2,out3,out4,out5: out std_logic;
+            out6,out7,out8,out9,out10,out11,out12: out std_logic
+         );
+    end component;
+    
+    component new_block2 is
+        Port (
+            in0,in1,in2,in3,in4,in5,in6,in7,in8,in9: in std_logic;
+            in10,in11,in12,in13: in std_logic;
+            out0,out1,out2,out3,out4,out5,out6: out std_logic
+         );
+    end component;
+    
+    component new_block3 is
+        Port (
+            in0,in1,in2,in3,in4,in5,in6:  in std_logic;
+            in7,in8,in9,in10,in11,in12,in13: in std_logic;
+            out0,out1,out2,out3,out4,out5,out6: out std_logic
+         );
+    end component;
+    
+    component new_block4 is
+        Port (
+            in0,in1,in2,in3,in4,in5,in6:  in std_logic;
+            in7,in8,in9,in10,in11,in12,in13:   in std_logic;
+            out0,out1,out2,out3,out4,out5,out6: out std_logic
+         );
+    end component;
+    
+    component C_gates is
+        Port (
+            RL4,bit0,bit1,bit2,bit3,bit4: in std_logic;
+            c1,c4_or_c2,c4_or_c3          : out std_logic
+         );
+    end component;
+    
+----signal declaration-----
+    signal c4c2, c1sig, c4c3: std_logic;
+    
+    signal blk1out0,blk1out1,blk1out2,blk1out3,blk1out4: std_logic;    
+    signal blk1out5,blk1out6,blk1out7,blk1out8,blk1out9: std_logic;
+    signal blk1out10,blk1out11,blk1out12,blk1out13,blk1out14,blk1out15: std_logic;
+    
+    signal blk2out0, blk2out1,blk2out2,blk2out3,blk2out4: std_logic;
+    signal blk2out5,blk2out6,blk2out7: std_logic; 
+    
+    signal blk3out0,blk3out1,blk3out2,blk3out3,blk3out4,blk3out5,blk3out6,blk3out7: std_logic;
+
+    signal RL4sig,RL3sig,RL2sig,RL1sig,RL0sig: std_logic;
+    
+    signal RR4sig,RR3sig,RR2sig,RR1sig,RR0sig : std_logic;
+    
+    signal bit0sig,bit1sig,bit2sig,bit3sig,bit4sig : std_logic;
+    
+
+begin
+    n(0) <= Roo;
+    n(1) <= RoI;
+----port map-----
+    R_L: RL port map(
+            R00  => Roo,
+            Rm10 => RmIo,
+            R01  => RoI,
+            Rm11 => RmII,
+            R02  => Ro2,
+            Rm12 => RmI2,
+            R03  => '0',
+            Rm13 => '0',
+            RL4  => RL4sig, 
+            RL3  => RL3sig, 
+            RL2  => RL2sig, 
+            RL1  => RL1sig, 
+            RL0  => RL0sig                
+         );
+    
+    R_R: RR port map (
+            R00  => Roo,
+            Rp10 => RpIo,
+            R01  => RoI,
+            Rp11 => RpII,
+            R02  => Ro2,
+            Rp12 => RpI2,
+            R03  => '0',
+            Rp13 => RpI3,
+            RR4  => RR4sig,
+            RR3  => RR3sig,
+            RR2  => RR2sig,
+            RR1  => RR1sig,
+            RR0  => RR0sig
+         );
+    
+    S_O_D: SOD port map(
+            RR4  => RR4sig,
+            RR3  => RR3sig,
+            RR2  => RR2sig,
+            RR1  => RR1sig,
+            RR0  => RR0sig, 
+            RL4  => RL4sig,
+            RL3  => RL3sig,
+            RL2  => RL2sig,
+            RL1  => RL1sig,
+            RL0  => RL0sig, 
+            bit0 => bit0sig,
+            bit1 => bit1sig,
+            bit2 => bit2sig,
+            bit3 => bit3sig,
+            bit4 => bit4sig 
+         );
+    
+    new_layer1: new_block1 port map(
+            R00  => Roo,
+            R01  => RoI,
+            R02  => Ro2,
+            Rp10 => RpIo,
+            Rp11 => RpII,
+            Rp12 => RpI2,
+            Rp13 => RpI3,
+            Rm10 => RmIo,
+            Rm11 => RmII,
+            Rm12 => RmI2,
+            ----outputs----
+            out0  => blk1out0,
+            out1  => blk1out1,
+            out2  => blk1out2,
+            out3  => blk1out3,
+            out4  => blk1out4,
+            out5  => blk1out5,
+            out6  => blk1out6,
+            out7  => blk1out7,
+            out8  => blk1out8,
+            out9  => blk1out9,
+            out10 => blk1out10,
+            out11 => blk1out11,
+            out12 => blk1out12
+         );
+         
+    new_layer2: new_block2 port map(
+        in0  => '1',
+        in1  => blk1out0,
+        in2  => blk1out1, 
+        in3  => blk1out2, 
+        in4  => blk1out3, 
+        in5  => blk1out4, 
+        in6  => blk1out5, 
+        in7  => blk1out6, 
+        in8  => blk1out7, 
+        in9  => blk1out8, 
+        in10 => blk1out9, 
+        in11 => blk1out10,
+        in12 => blk1out11,
+        in13 => blk1out12, 
+        out0 => blk2out0,
+        out1 => blk2out1,
+        out2 => blk2out2,
+        out3 => blk2out3,
+        out4 => blk2out4,
+        out5 => blk2out5,
+        out6 => blk2out6
+     );
+    
+    new_layer3: new_block3 port map (
+       in0  => c1sig,
+       in1  => blk2out0,
+       in2  => blk2out1,
+       in3  => c4c2,
+       in4  => blk2out2,
+       in5  => c4c2,
+       in6  => blk2out3,
+       in7  => c4c2,
+       in8  => blk2out4,
+       in9  => c4c2,
+       in10 => blk2out5,
+       in11 => c4c2,
+       in12 => blk2out6,
+       in13 => c4c2,
+       out0 => blk3out0,
+       out1 => blk3out1,
+       out2 => blk3out2,
+       out3 => blk3out3,
+       out4 => blk3out4,
+       out5 => blk3out5,
+       out6 => blk3out6
+    );
+    
+    new_layer4: new_block4 port map(
+       in0  => blk3out0,
+       in1  => c4c3,
+       in2  => blk3out1,
+       in3  => c4c3,
+       in4  => blk3out2,
+       in5  => c4c3,
+       in6  => blk3out3,
+       in7  => c4c3,
+       in8  => blk3out4,
+       in9  => c4c3,
+       in10 => blk3out5,
+       in11 => c4c3,
+       in12 => blk3out6,
+       in13 => c1sig,
+       out0 => n(2),
+       out1 => n(3),
+       out2 => n(4),
+       out3 => n(5),
+       out4 => n(6),
+       out5 => n(7),
+       out6 => n(8)
+    );
+    
+    Cgates: C_gates port map (
+       RL4     => RL4sig,
+       bit0    => bit0sig,
+       bit1    => bit1sig,
+       bit2    => bit2sig,
+       bit3    => bit3sig,
+       bit4    => bit4sig,
+       c1      => c1sig,
+       c4_or_c2=> c4c2,
+       c4_or_c3=> c4c3       
+    );
+end Behavioral;
