@@ -1,0 +1,71 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 06/29/2023 10:56:03 AM
+-- Design Name: 
+-- Module Name: fullAdder - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity fullAdder is
+    Port (
+        A,B,Cin : in std_logic;
+        sum, carryOut: out std_logic
+     );
+end fullAdder;
+
+architecture Behavioral of fullAdder is
+    -------------component declaration----------
+    component halfAdder is
+        Port (
+            A,B : in std_logic;
+            sum : out std_logic;
+            cout: out std_logic
+         );
+    end component;
+    
+    -------------signal declaration-------------
+    signal s1,c1,c2 : std_logic;
+    
+    
+begin
+    h1: halfAdder port map(
+        A => A,
+        B => B,
+        sum => s1,
+        cout => c1
+        );
+    
+    h2: halfAdder port map(
+        A => s1,
+        B => Cin,
+        sum => sum,
+        cout => c2
+        );
+    carryOut <= c1 or c2;
+
+end Behavioral;
