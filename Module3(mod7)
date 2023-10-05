@@ -1,0 +1,85 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 09/22/2023 05:29:57 PM
+-- Design Name: 
+-- Module Name: newModule3 - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity newModule3 is
+    Port (
+        r0,r1,r2,in1  : in std_logic;
+        out0,out1,out2: out std_logic
+     );
+end newModule3;
+
+architecture Behavioral of newModule3 is
+-----component declaration-------
+    component halfAdder is
+        Port (
+            A,B : in std_logic;
+            sum : out std_logic;
+            cout: out std_logic
+         );
+    end component;
+    
+    component xorLogic is
+        Port (
+            A,B : in std_logic;
+            Y   : out std_logic
+         );
+    end component;
+
+-------signal declaration-----
+    signal comp0carry,comp1carry : std_logic; 
+    signal gnd : std_logic:= '0';    
+
+
+begin
+-----port map---------
+    comp0: halfAdder port map(
+        A    => in1  ,
+        B    => r0   ,
+        sum  => out0 ,
+        cout => comp0carry
+        );
+        
+    comp1: halfAdder port map(
+            A    => comp0carry  ,    
+            B    => r1   ,
+            sum  => out1 ,
+            cout => comp1carry
+            );
+            
+    comp2: xorLogic port map(
+            A =>  comp1carry,    
+            B =>  r2,
+            Y =>  out2 
+            );           
+    
+end Behavioral;
