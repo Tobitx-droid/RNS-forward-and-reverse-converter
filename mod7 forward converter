@@ -1,0 +1,164 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 09/22/2023 05:20:58 PM
+-- Design Name: 
+-- Module Name: newMod7 - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity newMod7 is
+    Port (
+        --INPUTS
+        a_0,a_1,a_2 : in std_logic;
+        b_0,b_1,b_2 : in std_logic;
+        c_0,c_1,c_2 : in std_logic;
+        
+        --OUTPUTS
+        out_0,out_1,out_2 : out std_logic
+     );
+end newMod7;
+
+architecture Behavioral of newMod7 is
+
+------component declaration----
+    component module1 is
+        Port (
+            --INPUTS
+            a0,a1,a2 : in std_logic;
+            b0,b1,b2 : in std_logic;
+            c0,c1,c2 : in std_logic;
+            
+            --OUTPUTS
+            sum0,carry0    : out std_logic;
+            sum1,carry1    : out std_logic;
+            sum2,carry2    : out std_logic
+            
+            
+         );
+    end component;
+    
+    component module2 is
+        Port (
+            in0i,in0ii,in1i,in1ii,in2    : in std_logic;
+            out0,out1,out2i,out2ii       : out std_logic
+            
+         );
+    end component;
+    
+    component newModule3 is
+        Port (
+            r0,r1,r2,in1  : in std_logic;
+            out0,out1,out2: out std_logic
+         );
+    end component;
+    
+    component logic is
+        Port (
+            r0,r1,r2,c : in std_logic;
+            y: out std_logic
+         );
+     end component;
+    
+-----signal declaration----------
+    --LAYER A SIGNALS
+    signal carryOut0a,carryOut1a,carryOut2a: std_logic;
+    signal sum0a,sum1a,sum2a : std_logic;
+    
+    --LAYER B SIGNALS
+    signal sum0b,sum1b,sum2b,carry2b: std_logic;
+    
+    --LAYER C SIGNALS
+    signal sum0c,sum1c,sum2c,carry2c: std_logic;
+    
+    --LOGIC SIGNALS
+    signal logicOut: std_logic;
+    
+begin
+
+---port map----
+    module_1: module1 port map(
+        a0        => a_0,
+        a1        => a_1,
+        a2        => a_2,
+        b0        => b_0,
+        b1        => b_1,
+        b2        => b_2,
+        c0        => c_0,
+        c1        => c_1,
+        c2        => c_2,
+        sum0      => sum0a,
+        carry0    => carryOut0a,
+        sum1      => sum1a,
+        carry1    => carryOut1a,
+        sum2      => sum2a,
+        carry2    => carryOut2a
+        );
+        
+    module_2: module2 port map( 
+        in0i    =>  carryOut0a,
+        in0ii   =>  sum1a,
+        in1i    =>  carryOut1a,
+        in1ii   =>  sum2a,
+        in2     =>  carryOut2a,
+        out0    =>  sum0b,
+        out1    =>  sum1b,
+        out2i   =>  sum2b,
+        out2ii  =>  carry2b
+        );
+        
+    module_3: module2 port map(     
+            in0i    =>  sum0a,    
+            in0ii   =>  sum2b,    
+            in1i    =>  sum0b,    
+            in1ii   =>  carry2b,    
+            in2     =>  sum1b,    
+            out0    =>  sum0c,    
+            out1    =>  sum1c,    
+            out2i   =>  sum2c,    
+            out2ii  =>  carry2c     
+            );    
+               
+    module_4: newModule3 port map(
+        r0    =>  sum0c ,
+        r1    =>  sum1c ,
+        r2    =>  sum2c ,
+        in1   =>  logicOut,    
+        out0  =>  out_0 ,
+        out1  =>  out_1 ,
+        out2  =>  out_2 
+        );
+        
+    gate: logic port map(
+        r0 => sum0c,
+        r1 => sum1c,
+        r2 => sum2c,
+        c  => carry2c,
+        y  => logicOut
+        );
+
+end Behavioral;
