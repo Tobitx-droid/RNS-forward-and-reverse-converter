@@ -1,0 +1,173 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 09/19/2023 11:03:13 AM
+-- Design Name: 
+-- Module Name: new_block1 - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity new_block1 is
+    Port (---inputs---
+        R02,R01,R00: in std_logic;
+        Rp10,Rp11,Rp12,Rp13: in std_logic;
+        Rm10,Rm11,Rm12: in std_logic;
+        ----outputs----
+        out0,out1,out2,out3,out4,out5: out std_logic;
+        out6,out7,out8,out9,out10,out11,out12: out std_logic
+     );
+end new_block1;
+
+architecture Behavioral of new_block1 is
+----component fullAdder----
+    component fullAdder is
+        Port (
+            A,B,Cin : in std_logic;
+            sum, carryOut: out std_logic
+         );
+    end component;
+    
+    component halfAdder is
+        Port (
+            A,B : in std_logic;
+            sum : out std_logic;
+            cout: out std_logic
+         );
+    end component;
+    
+    component notGate is
+        Port (
+            A : in std_logic;
+            Y : out std_logic
+         );
+    end component;
+    
+    component xorLogic is
+        Port (
+            A,B : in std_logic;
+            Y   : out std_logic
+         );
+    end component;
+    
+------signal declaration-------
+    signal not0out,not1out,not2out: std_logic;
+    signal not3out,not4out,not5out,not6out: std_logic;
+
+begin
+---port map----
+
+    compNot0: notGate port map(
+        A => Rp10,
+        Y => not0out              
+        );
+    
+    comp0: fullAdder port map(
+           A        => not0out, 
+           B        => Rm10,
+           Cin      => R02,
+           sum      => out0,
+           carryOut => out1
+        );
+    
+    compNot1: notGate port map(
+        A => Rp11,
+        Y => not1out              
+        );
+    
+    comp1: halfAdder port map(
+        A => not1out,
+        B => Rm11,
+        sum => out2, 
+        cout => out3
+        );
+    
+    compNot2: notGate port map(
+        A => Rp12,
+        Y => not2out              
+        );
+        
+    comp2: halfAdder port map(
+        A => not2out,
+        B => Rm12,
+        sum =>out4 , 
+        cout => out5
+        );
+        
+    compNot3:notGate port map(
+        A => Rp13,
+        Y => not3out              
+        );
+        
+    comp3: fullAdder port map(
+           A        => Rp10, 
+           B        => Rm10,
+           Cin      => not3out,
+           sum      => out6,
+           carryOut => out7
+        );
+        
+    compNot4: notGate port map(
+        A => R00,
+        Y => not4out              
+        );
+        
+    comp4: fullAdder port map(
+           A        => Rp11,
+           B        => Rm11,
+           Cin      => not4out,
+           sum      => out8,
+           carryOut => out9
+        );
+        
+    compNot5: notGate port map(
+        A => R01,
+        Y => not5out              
+        );
+        
+    comp5: fullAdder port map(
+           A        => Rp12,
+           B        => Rm12,
+           Cin      => not5out,
+           sum      => out10,
+           carryOut => out11
+        ); 
+        
+    compNot6: notGate port map(
+        A =>R02,
+        Y => not6out
+        ); 
+        
+    comp6: xorLogic port map(
+        A => Rp13,
+        B => not6out, 
+        Y => out12
+        );   
+
+
+
+
+end Behavioral;
