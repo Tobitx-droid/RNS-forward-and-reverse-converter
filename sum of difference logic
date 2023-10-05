@@ -1,0 +1,110 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 09/19/2023 12:40:05 PM
+-- Design Name: 
+-- Module Name: SOD - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity SOD is
+    Port (
+        RR4,RR3,RR2,RR1,RR0 : in std_logic;
+        RL4,RL3,RL2,RL1,RL0 : in std_logic;
+        bit0,bit1,bit2,bit3,bit4 : out std_logic
+     );
+end SOD;
+
+architecture Behavioral of SOD is
+---------component declaration-----------
+   component halfAdder is
+        Port (
+            A,B : in std_logic;
+            sum : out std_logic;
+            cout: out std_logic
+         );
+   end component;
+    
+    component fullAdder is
+        Port (
+            A,B,Cin : in std_logic;
+            sum, carryOut: out std_logic
+         );
+    end component;
+   
+    component xor3input is
+    Port (
+        A,B,C : in std_logic;
+        Y     : out std_logic
+     );
+    end component;
+   
+--------signal declaration-------
+    signal c0,c1,c2,c3: std_logic;
+
+begin
+------port map------
+    
+    comp0: halfAdder port map(
+        A   => RR0,
+        B   => RL0,
+        sum => bit0,
+        cout=> c0
+        );
+        
+    comp1: fullAdder port map (
+            A        => RR1,
+            B        => RL1,
+            Cin      => c0,
+            sum      => bit1,
+            carryOut => c1
+         );
+         
+    comp2: fullAdder port map (
+            A        => RR2,
+            B        => RL2,
+            Cin      => c1,
+            sum      => bit2,
+            carryOut => c2
+         );
+         
+    comp3: fullAdder port map (
+           A        => RR3,
+           B        => RL3,
+           Cin      => c2,
+           sum      => bit3,
+           carryOut => c3
+        );
+    
+    comp4: xor3input port map(
+                A => RR4,
+                B => RL4,
+                C => c3, 
+                Y => bit4
+             );
+
+end Behavioral;
