@@ -1,0 +1,71 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 09/19/2023 02:31:15 PM
+-- Design Name: 
+-- Module Name: C_gates - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity C_gates is
+    Port (
+        RL4,bit0,bit1,bit2,bit3,bit4: in std_logic;
+        c1,c4_or_c2,c4_or_c3          : out std_logic
+     );
+end C_gates;
+
+architecture Behavioral of C_gates is
+------signal declaration-----
+    signal c21,c22,c31,c32,c3,c4,c2: std_logic;
+    signal bitsig : std_logic;
+    
+begin
+    c21 <= bit4 and (not bit0);
+    
+    bitsig <=  not(bit0 or bit1 or bit2 or bit3);
+    c22 <= RL4 and not(bit4) and bitsig;
+    
+    c31 <= not(bit4) and not(bit3) and bit0;
+    
+    c32 <= bit4 and bit3 and bit0;
+    
+    c1 <= not(bit4) and bit3 and bit0;
+    
+    c2 <= c22 or c21;
+    
+    c3 <= c32 or c31;
+    
+    c4 <= bit4 and not(bit3) and bit0;
+    
+    c4_or_c3 <= c4 or c3;
+    
+    c4_or_c2 <= c4 or c2;
+    
+    
+    
+
+end Behavioral;
