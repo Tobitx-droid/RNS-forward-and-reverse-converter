@@ -1,0 +1,60 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 09/04/2023 03:06:25 PM
+-- Design Name: 
+-- Module Name: comparator - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity comparator is
+    Port (
+        in0i,in0ii,in1i,in1ii,in2i,in2ii,in3i,in3ii: in std_logic;
+        in4i,in4ii,in5i,in5ii,in6i,in6ii,in7i,in7ii: in std_logic;
+        in8i,in8ii: in std_logic;
+        out0,out1,out2,out3,out4,out5,out6,out7,out8: out std_logic
+     );
+end comparator;
+
+architecture Behavioral of comparator is
+
+begin
+    
+    out0 <= in0i xor in0ii;
+    out1 <= in1i xor in1ii;
+    out2 <= in2i xor in2ii;
+    out3 <= in3i xor in3ii;
+    out4 <= in4i xor in4ii;
+    out5 <= in5i xor in5ii;
+    out6 <= in6i xor in6ii;
+    out7 <= in7i xor in7ii;
+    out8 <= in8i xor in8ii;
+    --out  <= in i xor in ii;
+    --out  <= in i xor in ii;
+    --out  <= in i xor in ii;
+
+end Behavioral;
