@@ -1,0 +1,137 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 09/19/2023 02:00:01 PM
+-- Design Name: 
+-- Module Name: RL - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity RL is
+    Port (
+        R00,Rm10,R01,Rm11,R02,Rm12,R03,Rm13: in std_logic;
+        RL4,RL3,RL2,RL1,RL0: out std_logic                
+     );
+end RL;
+
+architecture Behavioral of RL is
+    -----component declaration----
+    component fullAdder is
+        Port (
+            A,B,Cin : in std_logic;
+            sum, carryOut: out std_logic
+         );
+    end component;
+    
+    component notGate is
+        Port (
+            A : in std_logic;
+            Y : out std_logic
+         );
+    end component;
+    
+    component xor3input is
+    Port (
+        A,B,C : in std_logic;
+        Y     : out std_logic
+     );
+    end component;
+    
+    
+-----signal declaration-------
+    signal c0,c1,c2,c3,    R00sig,R01sig,R02sig,R03sig: std_logic;
+
+
+begin
+----port map----
+
+    not0: notGate port map (
+            A => R00,
+            Y => R00sig
+         );
+
+    comp0: fullAdder port map (
+            A        => R00sig,
+            B        => Rm10,
+            Cin      => '1',
+            sum      => RL0,
+            carryOut => c0
+         );
+         
+    not1: notGate port map (
+            A => R01,
+            Y => R01sig
+         );        
+    comp1: fullAdder port map (
+            A        => R01sig,
+            B        => Rm11,
+            Cin      => c0,
+            sum      => RL1,
+            carryOut => c1
+         );
+         
+    not2: notGate port map (
+            A => R02,
+            Y => R02sig
+         );
+         
+    comp2: fullAdder port map (
+            A        => R02sig,
+            B        => Rm12,
+            Cin      => c1,
+            sum      => RL2,
+            carryOut => c2
+         );
+    
+    not3: notGate port map (
+            A => R03,
+            Y => R03sig
+         );
+              
+    comp3: fullAdder port map (
+            A        => R03sig,
+            B        => Rm13,
+            Cin      => c2,
+            sum      => RL3,
+            carryOut => c3
+         );
+         
+    comp4: xor3input port map(
+        A => '0',
+        B => '1',
+        C => c3,  
+        Y => RL4 
+     );
+         
+     
+            
+            
+            
+            
+         
+
+end Behavioral;
