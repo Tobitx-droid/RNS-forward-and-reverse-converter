@@ -1,0 +1,229 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 08/17/2023 05:23:54 PM
+-- Design Name: 
+-- Module Name: mod9counter - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity mod9converter is
+    Port (
+        a0,a1,a2 : in std_logic;
+        b0,b1,b2 : in std_logic;
+        c0,c1,c2 : in std_logic;
+        
+        out1,out2,out3,out4,out5 : out std_logic
+     );
+end mod9converter;
+
+architecture Behavioral of mod9converter is
+
+------component declaration-----
+    component module1 is
+        Port (
+            --INPUTS
+            a0,a1,a2 : in std_logic;
+            b0,b1,b2 : in std_logic;
+            c0,c1,c2 : in std_logic;
+            
+            --OUTPUTS
+            sum0,carry0    : out std_logic;
+            sum1,carry1    : out std_logic;
+            sum2,carry2    : out std_logic
+            
+            
+         );
+    end component;
+    
+    --component module2 is
+    --    Port (
+    --        in0i,in0ii,in1i,in1ii,in2    : in std_logic;
+    --        out0,out1,out2i,out2ii       : out std_logic
+    --
+    --     );
+    --end component;
+    
+    component moduleB is
+        Port (
+            in0i,in0ii,in1i,in1ii,in2: in std_logic;
+            out0,out1,out2i,out2ii: out std_logic
+           
+         );
+    end component;
+    
+    component moduleC is
+        Port (
+            A,B,C,D,E : in std_logic;
+            r0,r1,r2,r3,r4 : out std_logic
+         );
+    end component;
+    
+    component moduleD is
+        Port (
+            Ai,Aii,B,C,Di,Dii,E : in std_logic;
+            out1,out2,out3,out4,out5 : out std_logic
+         );
+    end component;
+    
+    component moduleE is
+        Port (
+            Ai,Aii,Bi,Bii,Ci,Cii,D,Ei,Eii: in std_logic;
+            out1,out2,out3,out4,out5: out std_logic
+         );
+    end component;
+    
+    component logicGates is
+        Port (
+            r4,r3,r2,r1,r0: in std_logic;
+            z : out std_logic
+         );
+    end component;
+    
+    component notGate is
+        Port (
+            A : in std_logic;
+            Y : out std_logic
+         );
+    end component;
+    
+------signal declaration------
+    --MODULE A SIGNALS
+    signal carry0a,carry1a,carry2a : std_logic;
+    signal sum0a,sum1a,sum2a       : std_logic;
+    --MODULE B SIGNALS
+    signal out0b,out1b,out2bi,out2bii: std_logic;
+    --MODULE C SIGNALS
+    signal r0,r1,r2,r3,r4            : std_logic;
+    --MODULE D SIGNALS
+    signal sum0d,sum1d,sum2d,sum3d,sum4d: std_logic;
+    --MODULE E SIGNALS
+    signal z: std_logic;
+    --MODULE0 SIGNALS
+    signal b_0,b_1,b_2: std_logic;
+begin
+------port map-----
+    not1: notGate port map(
+        A => b0,
+        Y => b_0
+        );
+     
+    not2: notGate port map(
+        A => b1,
+        Y => b_1
+        );
+        
+    not3: notGate port map(
+        A => b2,
+        Y => b_2
+        );   
+        
+    moduleI: module1 port map(
+        a0        => a0,
+        a1        => a1,
+        a2        => a2,
+        b0        => b_0,
+        b1        => b_1,
+        b2        => b_2,
+        c0        => c0,
+        c1        => c1,
+        c2        => c2,
+        sum0      => sum0a,
+        carry0    => carry0a,
+        sum1      => sum1a,
+        carry1    => carry1a,
+        sum2      => sum2a,
+        carry2    => carry2a
+        );
+        
+    moduleII: moduleB port map( 
+        in0i    =>  carry0a,
+        in0ii   =>  sum1a,
+        in1i    =>  carry1a,
+        in1ii   =>  sum2a,
+        in2     =>  carry2a,
+        out0    =>  out0b,
+        out1    =>  out1b,
+        out2i   =>  out2bi,
+        out2ii  =>  out2bii
+        );
+        
+    moduleIII: moduleC port map(
+        A   => sum0a,
+        B   => out0b,
+        C   => out1b,
+        D   => out2bi,
+        E   => out2bii,
+        r0  => r0,
+        r1  => r1,
+        r2  => r2,
+        r3  => r3,
+        r4  => r4
+        ); 
+        
+    moduleIV: moduleD port map(
+        Ai    => r0,
+        Aii   => r4,
+        B     => r1,
+        C     => r2,
+        Di    => r3,
+        Dii   => r4,
+        E     => r4, 
+        out1  => sum0d,
+        out2  => sum1d,
+        out3  => sum2d,
+        out4  => sum3d,
+        out5  => sum4d
+        );   
+        
+    moduleV: moduleE port map(
+        Ai   => z,
+        Aii  => sum0d,
+        Bi   => z, 
+        Bii  => sum1d, 
+        Ci   => z,
+        Cii  => sum2d,
+        D    => sum3d,
+        Ei   => z,
+        Eii  => sum4d,
+        out1 => out1,
+        out2 => out2,
+        out3 => out3,
+        out4 => out4,
+        out5 => out5
+        );
+        
+    logicGate: logicGates port map(
+        r4 => r4,
+        r3 => r3,
+        r2 => r2,
+        r1 => r1,
+        r0 => r0,
+         z => z 
+         ); 
+
+end Behavioral;
