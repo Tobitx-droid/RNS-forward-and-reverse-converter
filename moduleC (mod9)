@@ -1,0 +1,102 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 08/16/2023 04:47:33 PM
+-- Design Name: 
+-- Module Name: moduleC - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity moduleC is
+    Port (
+        A,B,C,D,E : in std_logic;
+        r0,r1,r2,r3,r4 : out std_logic
+     );
+end moduleC;
+
+architecture Behavioral of moduleC is
+
+-----component declaration------
+    component halfAdder is
+        Port (
+            A,B : in std_logic;
+            sum : out std_logic;
+            cout: out std_logic
+         );
+    end component;
+    
+    component fullAdder is
+        Port (
+            A,B,Cin : in std_logic;
+            sum, carryOut: out std_logic
+         );
+    end component;    
+    
+-----signal declaration---------  
+    signal carry0,carry1,carry2,carry3: std_logic;
+    signal gnd : std_logic := '0';
+
+begin
+
+-----port map--------
+    comp0: halfAdder port map(
+        A    => A,
+        B    => '1', 
+        sum  => r0, 
+        cout => carry0 
+        );
+        
+    comp1: halfAdder port map(
+        A    => B,
+        B    => carry0, 
+        sum  => r1, 
+        cout => carry1 
+        );
+        
+    comp2: halfAdder port map(
+        A    => C,
+        B    => carry1, 
+        sum  => r2, 
+        cout => carry2 
+        ); 
+        
+    comp3: halfAdder port map(
+        A    => D,
+        B    => carry2, 
+        sum  => r3, 
+        cout => carry3 
+        ); 
+        
+    comp4: fullAdder port map(
+        A    => E,
+        B    => carry3,
+        Cin  => '1', 
+        sum  => r4, 
+        carryOut => gnd 
+        );     
+
+end Behavioral;
