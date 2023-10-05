@@ -1,0 +1,104 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 09/04/2023 04:09:51 PM
+-- Design Name: 
+-- Module Name: RNSsysTB - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_textio.ALL;
+library STD;
+USE STD.textio.all;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity RNSsysTB is
+--  Port ( );
+end RNSsysTB;
+
+architecture Behavioral of RNSsysTB is
+------component declaration----
+    component RNSsys is
+        Port (
+            inports: in std_logic_vector(8 downto 0);
+            outports: out std_logic_vector(8 downto 0)
+         );
+    end component;
+    
+-----signal declaration----
+    signal clk  : std_logic:= '0';
+    signal input_signal : std_logic_vector(8 downto 0) := (others => '0');
+    signal output_signal: std_logic_vector(8 downto 0);
+    signal count : integer:= 0;
+    
+    
+    constant sim_time : time:= 20ns;--Simulation time for each test case
+    
+
+begin
+
+--generation of the clock signal
+process
+    begin
+        wait for sim_time / 2;
+        clk <= not clk;
+end process;
+
+-- Instantiate the design entity... 
+ -----port map---
+    uut: RNSsys port map(
+        inports  => input_signal,
+        outports => output_signal
+        );
+ 
+------generating the stimulus-----       
+    stimulus: process
+        file Fout: TEXT open WRITE_MODE is "RNSTBnew1.txt";
+        variable current_line: line;
+    begin
+    
+        for i in 0 to 506 loop
+            input_signal <= std_logic_vector(to_unsigned(count,9));
+            count <= count + 1;
+            wait for sim_time;
+            
+------writing the test cases and outputs into a text file----
+            write(current_line, to_integer(unsigned(input_signal)));
+            write(current_line, string'("|"));
+            for j in 0 to 8 loop
+                write(current_line, input_signal(j));
+            end loop;
+            write(current_line, string'("|Output=>|"));
+            for k in 0 to 8 loop
+                write(current_line, output_signal(k));
+            end loop;
+            write(current_line, string'("|"));
+            write(current_line, to_integer(unsigned(output_signal)));
+            
+            writeline(Fout, current_line);
+        end loop; 
+    end process;
+
+end Behavioral;
