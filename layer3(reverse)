@@ -1,0 +1,132 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 09/19/2023 11:33:25 AM
+-- Design Name: 
+-- Module Name: new_block3 - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity new_block3 is
+    Port (
+        in0,in1,in2,in3,in4,in5,in6:  in std_logic;
+        in7,in8,in9,in10,in11,in12,in13: in std_logic;
+        out0,out1,out2,out3,out4,out5,out6: out std_logic
+     );
+end new_block3;
+
+architecture Behavioral of new_block3 is
+-----component declaration-----
+    component halfAdder is
+        Port (
+            A,B : in std_logic;
+            sum : out std_logic;
+            cout: out std_logic
+         );
+    end component;
+    
+    component fullAdder is
+        Port (
+            A,B,Cin : in std_logic;
+            sum, carryOut: out std_logic
+         );
+    end component;
+    
+    component gates is
+        Port (
+            x,y: in std_logic;
+            z  : out std_logic
+         );
+    end component;    
+    
+    component xor3input is
+        Port (
+            A,B,C : in std_logic;
+            Y     : out std_logic
+         );
+    end component;
+    
+--------signal declaration---------
+    signal cout0,cout1,cout2,cout3,cout4,cout5,cout6: std_logic;
+
+begin
+------port map------
+    comp0: halfAdder port map(
+        A    => in0, 
+        B    => in1,
+        sum  => out0,
+        cout => cout0
+        );
+
+    comp1: fullAdder port map(  
+       A        => in2,
+       B        => in3,
+       Cin      => cout0,
+       sum      => out1,
+       carryOut => cout1
+    );
+    
+    comp2: fullAdder port map(  
+       A        => in4,
+       B        => in5,
+       Cin      => cout1,
+       sum      => out2,
+       carryOut => cout2
+    );
+
+    comp3:fullAdder port map(  
+             A        => in6,
+             B        => in7,
+             Cin      => cout2,
+             sum      => out3,
+             carryOut => cout3
+          );
+
+    comp4: fullAdder port map(  
+             A        => in8,
+             B        => in9,
+             Cin      => cout3,
+             sum      => out4,
+             carryOut => cout4
+          );
+          
+    comp5: fullAdder port map(  
+             A        => in10,
+             B        => in11,
+             Cin      => cout4,
+             sum      => out5,
+             carryOut => cout5
+          );
+
+    comp6: xor3input port map(
+            A => in12,
+            B => in13,
+            C => cout5, 
+            Y => out6
+         );
+
+end Behavioral;
