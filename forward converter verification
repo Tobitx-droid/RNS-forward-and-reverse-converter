@@ -1,0 +1,58 @@
+input_file_name = "testMOD9TB.txt"
+output_file_name = "verification_testMod9.txt"
+
+# m = int(input("Enter the desired modulus: "))
+m = 9
+passed = 0
+failed = 0
+
+with open(input_file_name, "r") as input_file, open(output_file_name, "w") as output_file:
+    content = input_file.read()
+
+    content = content.splitlines()
+    row = len(content)
+    col = 6
+
+    for i in range(row):
+        if i < 10:
+           if int(content[i][0]) % m == int(content[i][2]):
+               print(f"Passed == {content[i][0]}")
+               output_file.write(f"Passed == {content[i][0]}\n")
+
+           else:
+               print(f"failed == {content[i][0]}")
+               output_file.write(f"Failed == {content[i][0]}\n")
+
+        if 10 < i < 100:
+            numA = content[i][0]
+            numB = content[i][1]
+            num100 = numA + numB
+
+            if int(num100) % m == int(content[i][3]):
+               print(f"Passed == {num100} ")
+               output_file.write(f"Passed == {num100} \n")
+
+            else:
+               print(f"failed == {num100}")
+               output_file.write(f"Failed == {num100} ")
+        if 100 < i < 512:
+            numI = content[i][0]
+            numII = content[i][1]
+            numIII = content[i][2]
+            num512 = numI + numII + numIII
+
+            if int(num512) % m == int(content[i][4]):
+               print(f"Passed == {num512} ")
+               output_file.write(f"Passed == {num512} \n")
+
+            else:
+               print(f"failed == {num512}")
+               output_file.write(f"failed == {num512}\n")
+          
+
+
+
+
+
+
+
